@@ -3,7 +3,7 @@ import random
 index = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 cols = ["A","B","C","D","E","F","G","H","I","J"]
 move = {0:"_",1:"#",2:"*"}
-maxScore = 3
+maxScore = 17
 computerMoveMemory = []
 class table():
     def __init__(self):
@@ -20,6 +20,17 @@ class table():
             self.str += cols[key] + " "
             for i in range(10):
                 self.str += (str(self.tableList[key][i])) + " "
+            self.str += newLine
+        return self.str
+
+    def showComputerTable(self):
+        self.str = "  0 1 2 3 4 5 6 7 8 9\n"
+        newLine = "\n"
+        for key in self.tableList.keys():
+            self.str += cols[key] + " "
+            for i in range(10):
+                isHidden = self.tableList[key][i] if self.tableList[key][i] != "S" else move[0] # eğer gemi varsa gizle
+                self.str += (isHidden) + " "
             self.str += newLine
         return self.str
 
@@ -49,7 +60,7 @@ class table():
         if len(position) != 2:
             print("Position type is wrong!")
             return False
-        elif not (cols.count(position[0]) == 1 and index.count(int(position[1])) == 1) :
+        elif not (position[0].isalpha() and cols.count(position[0]) == 1 and position[1].isdigit() and index.count(int(position[1])) == 1) :
             print("Position type is not correct!")
             return False
         elif self.tableList[cols.index(position[0])][int(position[1])] == move[0]:

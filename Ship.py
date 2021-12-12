@@ -52,22 +52,22 @@ class BaseShip():
             self.mStart =  (startPos, p1)
             self.mStop =  (startPos+self.mSize-1, p1)
 
-class Carrier(BaseShip):
-    def __init__(self, start,stop,random=False):
-        super(Carrier,self).__init__(AllShips.Carrier.value,start,stop,random)
-
-class BattleShip(BaseShip):
-    def __init__(self, start, stop,random=False):
-        super(BattleShip,self).__init__(AllShips.Battleship.value,start,stop,random)
-
-class Destroyer(BaseShip):
-    def __init__(self, start,stop,random=False):
-        super(Destroyer,self).__init__(AllShips.Destroyer.value,start,stop,random)
-
-class Submarine(BaseShip):
-    def __init__(self, start, stop,random=False):
-        super(Submarine,self).__init__(AllShips.Submarine.value,start,stop,random)
-
-class PatrolBoat(BaseShip):
-    def __init__(self, start, stop,random=False):
-        super(PatrolBoat,self).__init__(AllShips.PatrolBoat.value,start,stop,random)
+# class Carrier(BaseShip): //Tek değişiklik size olduğu için ayırmaya gerek kalmadı!
+#     def __init__(self, start,stop,random=False):
+#         super(Carrier,self).__init__(AllShips.Carrier.value,start,stop,random)
+#
+# class BattleShip(BaseShip):
+#     def __init__(self, start, stop,random=False):
+#         super(BattleShip,self).__init__(AllShips.Battleship.value,start,stop,random)
+#
+# class Destroyer(BaseShip):
+#     def __init__(self, start,stop,random=False):
+#         super(Destroyer,self).__init__(AllShips.Destroyer.value,start,stop,random)
+#
+# class Submarine(BaseShip):
+#     def __init__(self, start, stop,random=False):
+#         super(Submarine,self).__init__(AllShips.Submarine.value,start,stop,random)
+#
+# class PatrolBoat(BaseShip):
+#     def __init__(self, start, stop,random=False):
+#         super(PatrolBoat,self).__init__(AllShips.PatrolBoat.value,start,stop,random)
