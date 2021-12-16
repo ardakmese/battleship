@@ -1,97 +1,133 @@
-import random
-
+import unittest
 from Table import table
 from Ship import BaseShip
 
-# from Ship import Carrier
-# from Ship import BattleShip
-# from Ship import Destroyer
-# from Ship import Submarine
-# from Ship import PatrolBoat
+blankTable = "  0 1 2 3 4 5 6 7 8 9\n" \
+             "A _ _ _ _ _ _ _ _ _ _ \n" \
+             "B _ _ _ _ _ _ _ _ _ _ \n" \
+             "C _ _ _ _ _ _ _ _ _ _ \n" \
+             "D _ _ _ _ _ _ _ _ _ _ \n" \
+             "E _ _ _ _ _ _ _ _ _ _ \n" \
+             "F _ _ _ _ _ _ _ _ _ _ \n" \
+             "G _ _ _ _ _ _ _ _ _ _ \n" \
+             "H _ _ _ _ _ _ _ _ _ _ \n" \
+             "I _ _ _ _ _ _ _ _ _ _ \n" \
+             "J _ _ _ _ _ _ _ _ _ _ \n"
 
-isComputerStarter = (True,False)
-index = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
-cols = ["A","B","C","D","E","F","G","H","I","J"]
-ships = {"Carrier":5,"Battleship":4,"Destroyer":3,"Submarine":3,"Patrolboat":2}
+shipTable = "  0 1 2 3 4 5 6 7 8 9\n" \
+             "A S S S S S _ _ _ _ _ \n" \
+             "B _ _ _ _ _ _ _ _ _ _ \n" \
+             "C _ _ _ _ _ _ _ _ _ _ \n" \
+             "D _ _ _ _ _ _ _ _ _ _ \n" \
+             "E _ _ _ _ _ _ _ _ _ _ \n" \
+             "F _ _ _ _ _ _ _ _ _ _ \n" \
+             "G _ _ _ _ _ _ _ _ _ _ \n" \
+             "H _ _ _ _ _ _ _ _ _ _ \n" \
+             "I _ _ _ _ _ _ _ _ _ _ \n" \
+             "J _ _ _ _ _ _ _ _ _ _ \n"
 
-def setComputerShips(computer):
-    for value in ships.values():
-        ship = BaseShip(value,"","",True)
-        computer.inputShipRandomly(ship)
-    computer.setComputerMoves()
-    # print(computer)
+computerHitTable = "  0 1 2 3 4 5 6 7 8 9\n" \
+             "A * _ _ _ _ _ _ _ _ _ \n" \
+             "B _ _ _ _ _ _ _ _ _ _ \n" \
+             "C _ _ _ _ _ _ _ _ _ _ \n" \
+             "D _ _ _ _ _ _ _ _ _ _ \n" \
+             "E _ _ _ _ _ _ _ _ _ _ \n" \
+             "F _ _ _ _ _ _ _ _ _ _ \n" \
+             "G _ _ _ _ _ _ _ _ _ _ \n" \
+             "H _ _ _ _ _ _ _ _ _ _ \n" \
+             "I _ _ _ _ _ _ _ _ _ _ \n" \
+             "J _ _ _ _ _ _ _ _ _ _ \n"
 
-def setUserTable(table):
-    for key in ships.keys():
-        askPosition(key,ships[key],table)
+testShip = BaseShip(5,"A0","A4",False) # Carrier size ship = 5
 
+class TestTable(unittest.TestCase):
+    def setUp(self):
+        self.meTable = table()
 
-def askPosition(shipName,size,table):
-    userInput = input("Please enter "+ shipName +" ship start and stop position like 'A0 A"+str(size-1)+"': ")
-    retVal = checkPosition(size,userInput);
-    while retVal != True:
-        userInput = input("Please enter like 'A0 A"+str(size-1)+"': ")
-        retVal = checkPosition(size,userInput);
-    ship = BaseShip(size,userInput.split()[0],userInput.split()[1],False)
-    if not table.placeShip(ship):
-        print("There is another ship entered coordinates!")
-        askPosition(shipName,size,table)
-    else:
-        print(table)
+    def test_str(self):
+        self.assertEqual(self.meTable.__str__(), blankTable, "Dogrusu: \n"+ blankTable)
 
-def checkPosition(size,input):
-    if len(input.split()) != 2:
-        print("Input type is not correct!")
-        return False
+    def test_placeShip(self):
+        self.meTable.placeShip(testShip)
+        self.assertEqual(self.meTable.__str__(),shipTable, "Dogrusu: \n"+ shipTable)
 
-    start,stop = input.split()[0], input.split()[1]
-    if len(start) != 2 or len(stop) != 2:
-        print("Input size is not correct!")
-    elif not (start[0].isalpha() and cols.count(start[0]) == 1 and start[1].isdigit() and index.count(int(start[1])) == 1
-              and cols.count(stop[0]) == 1 and index.count(int(stop[1])) == 1):  # birinci değer kontrol A,B,C,D ikinci değer kotrol 1 2 3 4
-        print("Input type is not correct!")
-    elif start[0] == stop[0] and (size != (int(stop[1]) - int(start[1]) + 1)):
-        print("This ship is " + str(size) + " hole sized, your input size is: " + str(int(stop[1]) - int(start[1]) + 1))
-    elif start[1] == stop[1] and (size != (cols.index(stop[0]) - cols.index(start[0]) + 1)):
-        print("This ship is " + str(size) + " hole sized, your input size is: " +
-              str(cols.index(stop[0]) - cols.index(start[0]) + 1))
-    else:
-        return True
+    def test_filledPositionShip(self):
+        self.assertTrue(self.meTable.placeShip(testShip),msg="Önceden bu bölge doldurulduğu için doğrusu: False")
 
-def play():
-    computer = table()
-    setComputerShips(computer)
-    user = table()
-    print("Welcome BattleShip game, your table is ready to set your ships")
-    setUserTable(user)
-    print("Your table is ready:\n", user)
+    def test_move(self):
+        self.assertFalse(self.meTable.move("A15",False),msg="Fazla karakter girdisi girildi doğrusu: False")
+        self.assertFalse(self.meTable.move("1B",False),msg="Ters bir pozisyon girildi doğrusu: False")
+        self.meTable.placeShip(testShip)
+        self.assertIsNone(self.meTable.move("A1",True), msg="User doğru oynayınca return doğrusu : None")
+        self.assertIsNone(self.meTable.move("A0",False), msg="Computer User doğru oynayınca return doğrusu : None")
 
-    compStarter = random.choice(isComputerStarter)
-    hasComputerWon = computer.checkScore(True)
-    hasUserWon = user.checkScore(False)
+    def test_showComputerTable(self):
+        self.meTable.placeShip(testShip)
+        self.meTable.move("A0",False)
+        self.assertEqual(self.meTable.showComputerTable().__str__(),computerHitTable,"Doğrusu: \n"+ computerHitTable)
 
-    if compStarter:
-        attack =  computer.randomMove()
-        print("Computer has first move and attacked: ",attack)
-        user.move(attack,True)
-        print(user)
+    def test_randomMove(self):
+        self.meTable.setComputerMoves()
+        retVal = self.meTable.randomMove()
+        self.assertFalse(self.meTable.mComputerMoveMemory.__contains__(retVal), msg="Computer attack sonrası yapılan "
+                                                                                    "attack hafızadan silinmeli, doğrusu: False")
+    def test_setComputerMoves(self):
+        self.meTable.setComputerMoves()
+        self.assertFalse(len(self.meTable.mComputerMoveMemory) < 1, msg = "Computer move'lar eklendikten sonra size artmalı "
+                                                                          "doğrusu : False")
 
-    while (hasComputerWon == False and hasUserWon == False):
-        userAttack = input("Please enter attack place, like 'A0': ")
-        attackResult = computer.move(userAttack,False)
-        while attackResult == True:
-            userAttack = input("Please enter attack place, like 'A0': ")
-            attackResult = computer.move(userAttack, False)
+    def test_checkScore(self):
+        self.meTable.placeShip(testShip)
+        self.meTable.move("A0", False)
+        self.assertFalse(self.meTable.checkScore(False), msg= "Tek bir atış yapıldığı için doğrusu : False")
 
-        user.move(computer.randomMove(),True)
-        # print(user)
-        print(computer.showComputerTable())
-        hasComputerWon = user.checkScore(True)
-        hasUserWon = computer.checkScore(False)
+    def tearDown(self):
+        pass
 
-    if hasComputerWon:
-        print("Sorry computer has won maybe next time, good bye")
-    else:
-        print("Congrats you won! good bye")
+class TestShip(unittest.TestCase):
+    def setUp(self):
+        self.meShip = BaseShip(3,"A1","A2",False)
 
-play()
+    def test_position(self):
+        self.meShip.setInputs("A1","A3")
+        self.assertEqual(self.meShip.position(),((0, 1), (0, 3)),"Doğrusu: (0, 1), (0, 3) ")
+
+    def test_name(self):
+        self.assertEqual(self.meShip.name(), "S", "Doğrusu: 'S' ")
+
+    def test_horizontal(self):
+        isHorizontal = self.meShip.randomPosition()
+        if isHorizontal: #  horizontal ise columnlar eşit değilse rowlar
+            self.assertEqual(self.meShip.position()[0][0],self.meShip.position()[0][0],
+                             "Dogrusu ikisininde :"+str(self.meShip.position()[0][0]))
+        else:
+            self.assertEqual(self.meShip.position()[0][1], self.meShip.position()[0][1],
+                             "Dogrusu ikisininde"+str(self.meShip.position()[0][1]))
+
+def suiteTable():
+    my_suite = unittest.TestSuite()
+    my_suite.addTest(TestTable('test_str'))
+    my_suite.addTest(TestTable('test_placeShip'))
+    my_suite.addTest(TestTable('test_filledPositionShip'))
+    my_suite.addTest(TestTable('test_showComputerTable'))
+    my_suite.addTest(TestTable('test_inputShipRandomly'))
+    my_suite.addTest(TestTable('test_move'))
+    my_suite.addTest(TestTable('test_randomMove'))
+    my_suite.addTest(TestTable('test_setComputerMoves'))
+    my_suite.addTest(TestTable('test_checkScore'))
+    return my_suite
+
+def suiteShip():
+    my_suite = unittest.TestSuite()
+    my_suite.addTest(TestShip('test_position'))
+    my_suite.addTest(TestShip('test_name'))
+    my_suite.addTest(TestShip('test_horizontal'))
+    return my_suite
+
+def run_tests():
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(suiteShip())
+    runner.run(suiteTable())
+
+if __name__ == '__main__':
+    unittest.main()
