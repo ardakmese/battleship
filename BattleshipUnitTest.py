@@ -26,6 +26,18 @@ shipTable = "  0 1 2 3 4 5 6 7 8 9\n" \
              "I _ _ _ _ _ _ _ _ _ _ \n" \
              "J _ _ _ _ _ _ _ _ _ _ \n"
 
+computerHitTable = "  0 1 2 3 4 5 6 7 8 9\n" \
+             "A * _ _ _ _ _ _ _ _ _ \n" \
+             "B _ _ _ _ _ _ _ _ _ _ \n" \
+             "C _ _ _ _ _ _ _ _ _ _ \n" \
+             "D _ _ _ _ _ _ _ _ _ _ \n" \
+             "E _ _ _ _ _ _ _ _ _ _ \n" \
+             "F _ _ _ _ _ _ _ _ _ _ \n" \
+             "G _ _ _ _ _ _ _ _ _ _ \n" \
+             "H _ _ _ _ _ _ _ _ _ _ \n" \
+             "I _ _ _ _ _ _ _ _ _ _ \n" \
+             "J _ _ _ _ _ _ _ _ _ _ \n"
+
 testShip = BaseShip(5,"A0","A4",False) # Carrier size ship = 5
 
 class TestTable(unittest.TestCase):
@@ -42,23 +54,33 @@ class TestTable(unittest.TestCase):
     def test_filledPositionShip(self):
         self.assertTrue(self.meTable.placeShip(testShip),msg="Önceden bu bölge doldurulduğu için doğrusu: False")
 
-    def test_showComputerTable(self):
-        pass
-
-    def test_inputShipRandomly(self):
-        pass
-
     def test_move(self):
-        pass
+        self.assertFalse(self.meTable.move("A15",False),msg="Fazla karakter girdisi girildi doğrusu: False")
+        self.assertFalse(self.meTable.move("1B",False),msg="Ters bir pozisyon girildi doğrusu: False")
+        self.meTable.placeShip(testShip)
+        self.assertTrue(self.meTable.move("A0",False), msg="User doğru bir pozisyon girdi doğrusu : True")
+        self.assertTrue(self.meTable.move("A1",True), msg="Computer doğru bir pozisyon girdi doğrusu : True")
+        self.assertFalse(self.meTable.move("A1", False), msg="Aynı pozisyona tekrar saldırı yapıldı doğrusu : False")
+
+    def test_showComputerTable(self):
+        self.meTable.placeShip(testShip)
+        self.meTable.move("A0",False)
+        self.assertEqual(self.meTable.showComputerTable().__str__(),computerHitTable,"Doğrusu: \n"+ computerHitTable)
 
     def test_randomMove(self):
-        pass
-
+        self.meTable.setComputerMoves()
+        retVal = self.meTable.randomMove()
+        self.assertFalse(self.meTable.mComputerMoveMemory.__contains__(retVal), msg="Computer attack sonrası yapılan "
+                                                                                    "attack hafızadan silinmeli, doğrusu: False")
     def test_setComputerMoves(self):
-        pass
+        self.meTable.setComputerMoves()
+        self.assertFalse(len(self.meTable.mComputerMoveMemory) < 1, msg = "Computer move'lar eklendikten sonra size artmalı "
+                                                                          "doğrusu : False")
 
     def test_checkScore(self):
-        pass
+        self.meTable.placeShip(testShip)
+        self.meTable.move("A0", False)
+        self.assertFalse(self.meTable.checkScore(False), msg= "Tek bir atış yapıldığı için doğrusu : False")
 
     def tearDown(self):
         pass
@@ -66,9 +88,6 @@ class TestTable(unittest.TestCase):
 class TestShip(unittest.TestCase):
     def setUp(self):
         self.meShip = BaseShip()
-
-
-
 
 
 def suiteTable():
