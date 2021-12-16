@@ -87,8 +87,23 @@ class TestTable(unittest.TestCase):
 
 class TestShip(unittest.TestCase):
     def setUp(self):
-        self.meShip = BaseShip()
+        self.meShip = BaseShip(3,"A1","A2",False)
 
+    def test_position(self):
+        self.meShip.setInputs("A1","A3")
+        self.assertEqual(self.meShip.position(),((0, 1), (0, 3)),"Doğrusu: (0, 1), (0, 3) ")
+
+    def test_name(self):
+        self.assertEqual(self.meShip.name(), "S", "Doğrusu: 'S' ")
+
+    def test_horizontal(self):
+        isHorizontal = self.meShip.randomPosition()
+        if isHorizontal: #  horizontal ise columnlar eşit değilse rowlar
+            self.assertEqual(self.meShip.position()[0][0],self.meShip.position()[0][0],
+                             "Dogrusu ikisininde :"+str(self.meShip.position()[0][0]))
+        else:
+            self.assertEqual(self.meShip.position()[0][1], self.meShip.position()[0][1],
+                             "Dogrusu ikisininde"+str(self.meShip.position()[0][1]))
 
 def suiteTable():
     my_suite = unittest.TestSuite()
@@ -105,13 +120,15 @@ def suiteTable():
 
 def suiteShip():
     my_suite = unittest.TestSuite()
-
+    my_suite.addTest(TestShip('test_position'))
+    my_suite.addTest(TestShip('test_name'))
+    my_suite.addTest(TestShip('test_horizontal'))
     return my_suite
 
 def run_tests():
     runner = unittest.TextTestRunner(verbosity=2)
-    runner.run(suiteTable())
     runner.run(suiteShip())
+    runner.run(suiteTable())
 
 if __name__ == '__main__':
     unittest.main()
