@@ -1,0 +1,98 @@
+import unittest
+from Table import table
+from Ship import BaseShip
+
+blankTable = "  0 1 2 3 4 5 6 7 8 9\n" \
+             "A _ _ _ _ _ _ _ _ _ _ \n" \
+             "B _ _ _ _ _ _ _ _ _ _ \n" \
+             "C _ _ _ _ _ _ _ _ _ _ \n" \
+             "D _ _ _ _ _ _ _ _ _ _ \n" \
+             "E _ _ _ _ _ _ _ _ _ _ \n" \
+             "F _ _ _ _ _ _ _ _ _ _ \n" \
+             "G _ _ _ _ _ _ _ _ _ _ \n" \
+             "H _ _ _ _ _ _ _ _ _ _ \n" \
+             "I _ _ _ _ _ _ _ _ _ _ \n" \
+             "J _ _ _ _ _ _ _ _ _ _ \n"
+
+shipTable = "  0 1 2 3 4 5 6 7 8 9\n" \
+             "A S S S S S _ _ _ _ _ \n" \
+             "B _ _ _ _ _ _ _ _ _ _ \n" \
+             "C _ _ _ _ _ _ _ _ _ _ \n" \
+             "D _ _ _ _ _ _ _ _ _ _ \n" \
+             "E _ _ _ _ _ _ _ _ _ _ \n" \
+             "F _ _ _ _ _ _ _ _ _ _ \n" \
+             "G _ _ _ _ _ _ _ _ _ _ \n" \
+             "H _ _ _ _ _ _ _ _ _ _ \n" \
+             "I _ _ _ _ _ _ _ _ _ _ \n" \
+             "J _ _ _ _ _ _ _ _ _ _ \n"
+
+testShip = BaseShip(5,"A0","A4",False) # Carrier size ship = 5
+
+class TestTable(unittest.TestCase):
+    def setUp(self):
+        self.meTable = table()
+
+    def test_str(self):
+        self.assertEqual(self.meTable.__str__(), blankTable, "Dogrusu: \n"+ blankTable)
+
+    def test_placeShip(self):
+        self.meTable.placeShip(testShip)
+        self.assertEqual(self.meTable.__str__(),shipTable, "Dogrusu: \n"+ shipTable)
+
+    def test_filledPositionShip(self):
+        self.assertTrue(self.meTable.placeShip(testShip),msg="Önceden bu bölge doldurulduğu için doğrusu: False")
+
+    def test_showComputerTable(self):
+        pass
+
+    def test_inputShipRandomly(self):
+        pass
+
+    def test_move(self):
+        pass
+
+    def test_randomMove(self):
+        pass
+
+    def test_setComputerMoves(self):
+        pass
+
+    def test_checkScore(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+class TestShip(unittest.TestCase):
+    def setUp(self):
+        self.meShip = BaseShip()
+
+
+
+
+
+def suiteTable():
+    my_suite = unittest.TestSuite()
+    my_suite.addTest(TestTable('test_str'))
+    my_suite.addTest(TestTable('test_placeShip'))
+    my_suite.addTest(TestTable('test_filledPositionShip'))
+    my_suite.addTest(TestTable('test_showComputerTable'))
+    my_suite.addTest(TestTable('test_inputShipRandomly'))
+    my_suite.addTest(TestTable('test_move'))
+    my_suite.addTest(TestTable('test_randomMove'))
+    my_suite.addTest(TestTable('test_setComputerMoves'))
+    my_suite.addTest(TestTable('test_checkScore'))
+    return my_suite
+
+def suiteShip():
+    my_suite = unittest.TestSuite()
+
+    return my_suite
+
+def run_tests():
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(suiteTable())
+    runner.run(suiteShip())
+
+if __name__ == '__main__':
+    unittest.main()
