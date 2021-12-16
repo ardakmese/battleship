@@ -52,6 +52,8 @@ class BaseShip():
             self.mStart =  (startPos, p1)
             self.mStop =  (startPos+self.mSize-1, p1)
 
+        return isHorizontal
+
 # class Carrier(BaseShip): //Tek değişiklik size olduğu için ayırmaya gerek kalmadı!
 #     def __init__(self, start,stop,random=False):
 #         super(Carrier,self).__init__(AllShips.Carrier.value,start,stop,random)

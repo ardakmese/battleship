@@ -58,9 +58,8 @@ class TestTable(unittest.TestCase):
         self.assertFalse(self.meTable.move("A15",False),msg="Fazla karakter girdisi girildi doğrusu: False")
         self.assertFalse(self.meTable.move("1B",False),msg="Ters bir pozisyon girildi doğrusu: False")
         self.meTable.placeShip(testShip)
-        self.assertTrue(self.meTable.move("A0",False), msg="User doğru bir pozisyon girdi doğrusu : True")
-        self.assertTrue(self.meTable.move("A1",True), msg="Computer doğru bir pozisyon girdi doğrusu : True")
-        self.assertFalse(self.meTable.move("A1", False), msg="Aynı pozisyona tekrar saldırı yapıldı doğrusu : False")
+        self.assertIsNone(self.meTable.move("A1",True), msg="User doğru oynayınca return doğrusu : None")
+        self.assertIsNone(self.meTable.move("A0",False), msg="Computer User doğru oynayınca return doğrusu : None")
 
     def test_showComputerTable(self):
         self.meTable.placeShip(testShip)

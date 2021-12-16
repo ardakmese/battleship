@@ -4,10 +4,10 @@ index = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 cols = ["A","B","C","D","E","F","G","H","I","J"]
 move = {0:"_",1:"#",2:"*"}
 maxScore = 17
-computerMoveMemory = []
 class table():
     def __init__(self):
         self.tableList = {}
+        self.mComputerMoveMemory = []
         self.tableList = {0:[],1:[],2:[], 3:[], 4:[],5:[], 6:[], 7:[],8:[],9:[] }
         for value in self.tableList.values():
             for i in range(1,11):
@@ -76,14 +76,14 @@ class table():
             else : print("You Hit! :)")
 
     def randomMove(self):
-        move = random.choice(computerMoveMemory)
-        computerMoveMemory.remove(move)
+        move = random.choice(self.mComputerMoveMemory)
+        self.mComputerMoveMemory.remove(move)
         return move
 
     def setComputerMoves(self):
         for x in cols:
             for y in index:
-                computerMoveMemory.append(x+str(y))
+                self.mComputerMoveMemory.append(x+str(y))
 
     def checkScore(self,isComputer):
         score = 0
